@@ -5,31 +5,11 @@
     <link rel="stylesheet" type="text/css" href="main.css">
     <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v1.14.0/dist/aframe-extras.min.js"></script>
     <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+    <script src="https://unpkg.com/aframe-click-drag-component"></script>
+
     <script src="main.js"></script>
     <script>
-        AFRAME.registerComponent("toggle-main-lights", {
-        init: function() {
-            var state = true;
-            var self = this.el;
-            self.addEventListener("click", function(evt) {
-                var newIntensity;
-                if (state) {
-                    newIntensity = 0;
-                    state = false;
-                    document.querySelector("#Lever").emit("lightOff");
-                } else {
-                    newIntensity = 0.75;
-                    state = true;
-                    document.querySelector("#Lever").emit("lightOn")
-                }
-
-                var lights = document.querySelectorAll(".MainLighting");
-                for (var i = 0; i < lights.length; i++) {
-                    lights[i].setAttribute("light", {intensity: newIntensity}, false);
-                }
-            });
-        }
-    });
+    
     AFRAME.registerComponent("door-toggle", {
                 init: function() {
                     var open = false;
@@ -45,14 +25,52 @@
                     })
                 }
             });
+        AFRAME.registerComponent("move-projector",{
+                    init: function(){
+                        var move=false;
+                        var self=this.el;
+                        self.addEventListener("click",function(evt){
+                            if (move){
+                                move=false;
+                                self.emit("screenDown");
+                            }else{
+                                move=true;
+                                self.emit("screenUp")
+                            }
+
+                })
+             }
+        }),
+            AFRAME.registerComponent("tv-toggle", {
+                init: function() {
+                    var on = false;
+                    var self = this.el;
+                    self.addEventListener("click", function(evt) {
+                        var newMaterial;
+                        var newLighting;
+                        if (on) {
+                            newMaterial = {shader: "standard", color : "black"};
+                            on=false
+                        } else {
+                            newMaterial = {shader: "flat", src: "#video"};
+                            on=true
+                        }
+                        self.setAttribute("material", newMaterial, true);
+                        
+                        document.querySelector("#video").muted = !on;
+                    });
+                }
+            });
+
+            
     </script>
     
 
     <title>VR Project1</title>
 </head>
 <body>
-    <a-scene fog="color: #000000; far: 0; type: linear;" shadow="receive: true; cast: true;">
-        <a-entity light="type: ambient; intensity: 0.01"></a-entity>
+    <a-scene >
+        
 
         
         
@@ -66,23 +84,63 @@
                 <a-asset-item id="chair" src="Assets/waiting_chairs/scene.gltf"></a-asset-item>
                 <a-asset-item id="tv" src="Assets/Television/scene.gltf"></a-asset-item>
                 <a-asset-item id="tv_stand" src="Assets/TV_stand/TV stand.gltf"></a-asset-item>
-                <a-asset-item id="bookshelf" src="Assets/books_table/scene.gltf"></a-asset-item>
+                <a-asset-item id="bookstable" src="Assets/books_table/scene.gltf"></a-asset-item>
                 <a-asset-item id="ceiling_light" src="Assets/ceiling_light/scene.gltf"></a-asset-item>
                 <a-asset-item id="security_camera" src="Assets/security_camera/scene.gltf"></a-asset-item>
                 <a-asset-item id="office_desk" src="Assets/office_desk/scene.gltf"></a-asset-item>
                 <a-asset-item id="professors_desk" src="Assets/professors_desk/scene.gltf"></a-asset-item>
                 <a-asset-item id="professor_book_shelf" src ="Assets/professor_book_shelf/scene.gltf"></a-asset-item>
+                <a-asset-item id="carpet" src ="Assets/floor_carpet/scene.gltf"></a-asset-item>
+                <a-asset-item id="sanitizer" src ="Assets/sanitizer_bottle/scene.gltf"></a-asset-item>
+                <a-asset-item id="projector" src ="Assets/projector/scene.gltf"></a-asset-item>
+                <a-asset-item id="school_chair" src ="Assets/school_chair/scene.gltf"></a-asset-item>
+                <a-asset-item id="ceiling_fan" src ="Assets/ceiling_fan/scene.gltf"></a-asset-item>
+                <video id="video" src="images/video.mp4" autoplay="true" loop="true" muted="true"/>
                 <img id ="sky" src="images/sky.jpg">
         </a-assets>
-                <a-text value="Click to Open/Close Door" align="center" width="6" position="-14.86 5.5 6.7" rotation="0 90 0" color="red"></a-text>
+        <a-entity camera position="0 4.5 20" universal-controls>
+            <a-entity cursor="click:true" 
+                      position="0 0 -1"
+                      geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                      material="color: black; shader: flat">
+             
+              
+            </a-entity>
+          </a-entity>
+        <a-entity id="Scene1" visible="true" >
+            <a-box color="green" position="2 3 9.7" scale="0.25 0.2 0.02" onclick="setScene1()"></a-box>
+            <a-box color="red" position="0 3 9.7" scale="0.25 0.2 0.02" onclick="setScene2()"></a-box>
             <!-- Door -->
-            <a-entity door-toggle class="intersectable" position="-15 2.5 8" rotation="0 0 0">
-
+                <a-text value="Click to Open/Close Door" align="center" width="6" position="-14.86 5.5 6.7" rotation="0 90 0" color="red"></a-text>
+                <a-entity door-toggle class="intersectable" position="-15 2.5 8" rotation="0 0 0">
                 <a-entity geometry="primitive: box; depth: 3; height: 5; width: 0.1" material="src: url(images/wood.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1" position="0 0 -1.5"></a-entity>
                 <a-entity geometry="primitive: sphere; radius: 0.25" material="color:yellow" position="0 0 -2.5"></a-entity>
                 <a-animation attribute="rotation" begin="doorOpening" from="0 0 0" to="0 90 0" dur="500"></a-animation>
                 <a-animation attribute="rotation" begin="doorClosing" from="0 90 0" to="0 0 0" dur="500"></a-animation>
-            </a-entity>
+                </a-entity>
+                <a-text value="Click to Open/Close Door" align="center" width="6" position="-14.86 5.5 6.7" rotation="0 90 0" color="red"></a-text>
+                <a-entity door-toggle class="intersectable" position="-30.8 2.8 0" rotation="0 90 0">
+                <a-entity geometry="primitive: box; depth: 5; height: 6.3; width: 0.1" material="src: url(images/wood.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1" position="0 0 -1.8"></a-entity>
+                <a-entity geometry="primitive: sphere; radius: 0.25" material="color:yellow" position="0 0 -3"></a-entity>
+                <a-animation attribute="rotation" begin="doorOpening" from="0 0 0" to="0 90 0" dur="500"></a-animation>
+                <a-animation attribute="rotation" begin="doorClosing" from="0 90 0" to="0 0 0" dur="500"></a-animation>
+                </a-entity>
+                <a-entity door-toggle class="intersectable" position="-15.8 2.8 0" rotation="0 90 0">
+                <a-entity geometry="primitive: box; depth: 5; height: 6.3; width: 0.1" material="src: url(images/wood.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1" position="0 0 -1.8"></a-entity>
+                <a-entity geometry="primitive: sphere; radius: 0.25" material="color:yellow" position="0 0 -3"></a-entity>
+                <a-animation attribute="rotation" begin="doorOpening" from="0 0 0" to="0 90 0" dur="500"></a-animation>
+                <a-animation attribute="rotation" begin="doorClosing" from="0 90 0" to="0 0 0" dur="500"></a-animation>
+                </a-entity>
+                <a-entity door-toggle class="intersectable" position="-15.2 2.5 10" rotation="0 90 0">
+                <a-entity geometry="primitive: box; depth: 2.5; height: 5; width: 0.1" material="src: url(images/wood.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1" position="0 0 -1.1"></a-entity>
+                <a-entity geometry="primitive: sphere; radius: 0.25" material="color:yellow" position="0 0 -2"></a-entity>
+                <a-animation attribute="rotation" begin="doorOpening" from="0 0 0" to="0 90 0" dur="500"></a-animation>
+                <a-animation attribute="rotation" begin="doorClosing" from="0 90 0" to="0 0 0" dur="500"></a-animation>
+                </a-entity>
+            <!--TTU Logo-->
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="0.2 7.5 10.2" scale="1 1 1" material="src:url(images/TTU.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-30.2 7.5 10.2" scale="1 1 1" material="src:url(images/TTU_CS.jpg)"></a-entity>
+                
                 
             <!--East wall-->
                 <a-entity geometry="primitive: box; depth: 20; height: 10; width: 0.2" position="-45 5 0" material="src: url(images/wall.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1"></a-entity>
@@ -95,10 +153,59 @@
                 <a-entity geometry="primitive: box; depth: 0.2; height:5; width: 30" position="-30 7.5 10" material="src: url(images/wall.jpg); repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
                 <a-entity geometry="primitive: box; depth: 0.2; height:10; width: 27.5" position="-31.25 5 10" material="src: url(images/wall.jpg); repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
             <!--west wall-->
-                <a-entity geometry="primitive: box; depth: 20; height: 10; width: 0.2" position="15 5 0" material="src: url(images/wall.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 17.5; height: 3; width: 0.2" position="15 8.5 0" material="src: url(images/wall.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 17.5; height: 3; width: 0.2" position="15 1.5 0" material="src: url(images/wall.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 1.25; height: 10; width: 0.2" position="15 5 9.375" material="src:url(images/wall.jpg); repeat: 1.25 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 1.25; height: 10; width: 0.2" position="15 5 -9.375" material="src:url(images/wall.jpg); repeat: 1.25 10; metalness: 0; roughness: 1"></a-entity>
+            
+            <!--Window in west Wall -->
+                <a-entity geometry="primitive: box; depth: 17.5; height: 7.5; width: 0.1" position="15 5 0" material="src: url(images/glass.jpg); repeat: 15 7.5; opacity: 0.3; transparent: true; metalness: 0.1"></a-entity>
            
             <!--South Wall-->
-                <a-entity geometry="primitive: box; depth: 0.2; height:10; width: 90" position="-30 5 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 0.2; height:4; width: 30" position="0 2 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 0.2; height:3; width: 30" position="0 8.5 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 0.2; height:10; width: 20" position="-5 5 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 0.2; height:10; width: 4" position="14 5 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 10; height: 7.5; width: 0.1" position="7 5 -10" rotation="0 90 0" material="src: url(images/glass.jpg); repeat: 15 7.5; opacity: 0.3; transparent: true; metalness: 0.1"></a-entity>
+
+            <!--South wall for class-->
+                <a-entity geometry="primitive: box; depth: 0.2; height:4; width: 30" position="-60 2 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 0.2; height:10; width: 20" position="-65 5 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 0.2; height:3; width: 30" position="-60 8.5 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 0.2; height:10; width: 4" position="-46 5 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 17.5; height: 7.5; width: 0.1" position="-55 5 -10" rotation="0 90 0" material="src: url(images/glass.jpg); repeat: 15 7.5; opacity: 0.3; transparent: true; metalness: 0.1"></a-entity>
+            <!--North wall for classroom-->
+                <a-entity geometry="primitive: box; depth: 0.2; height:5; width: 30" position="-60 7.5 10" material="src: url(images/wall.jpg); repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 0.2; height:10; width: 27.5" position="-61.25 5 10" material="src: url(images/wall.jpg); repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity door-toggle class="intersectable" position="-45.2 2.5 10" rotation="0 90 0">
+                <a-entity geometry="primitive: box; depth: 2.5; height: 5; width: 0.1" material="src: url(images/wood.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1" position="0 0 -1.1"></a-entity>
+                <a-entity geometry="primitive: sphere; radius: 0.25" material="color:yellow" position="0 0 -2"></a-entity>
+                <a-animation attribute="rotation" begin="doorOpening" from="0 0 0" to="0 90 0" dur="500"></a-animation>
+                <a-animation attribute="rotation" begin="doorClosing" from="0 90 0" to="0 0 0" dur="500"></a-animation>
+                </a-entity>
+                <!--east wall for class-->
+                <a-entity geometry="primitive: box; depth: 17.5; height: 3; width: 0.2" position="-75 8.5 0" material="src: url(images/wall.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 17.5; height: 3; width: 0.2" position="-75 1.5 0" material="src: url(images/wall.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 10; height: 10; width: 0.2" position="-75 5 5" material="src:url(images/wall.jpg); repeat: 1.25 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 4; height: 10; width: 0.2" position="-75 5 -8" material="src:url(images/wall.jpg); repeat: 1.25 10; metalness: 0; roughness: 1"></a-entity>
+            
+            <!--Window in easet Wall for class room-->
+                <a-entity geometry="primitive: box; depth: 17.5; height: 7.5; width: 0.1" position="-75 5 0" material="src: url(images/glass.jpg); repeat: 15 7.5; opacity: 0.3; transparent: true; metalness: 0.1"></a-entity>
+            <!--Board in class room-->
+                <a-entity geometry="primitive: box; depth: 0.3; height: 6; width: 9" position="-63 4.8 9.8" material="src: url(images/board.jpg); repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 0.8; height: 0.2; width: 9" position="-63 1.5 9.6" material="src: url(images/metal.jpg); repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-cylinder color="black" height="0.8" radius="0.05" position="-66 1.6 9.7" rotation="0 0 90" ></a-cylinder>
+                <a-cylinder color="red" height="0.8" radius="0.05" position="-63 1.6 9.7" rotation="0 0 90" ></a-cylinder>
+                <a-cylinder color="blue" height="0.8" radius="0.05" position="-64.5 1.6 9.7" rotation="0 0 90" ></a-cylinder>
+                <a-cylinder color="green" height="0.8" radius="0.05" position="-61.5 1.6 9.7" rotation="0 0 90" ></a-cylinder>
+                <a-entity move-projector class="intersectable" geometry="primitive: box" scale="9 0.2 0.3" position="-63 9 9.1" material="src: url(images/board.jpg); repeat: 30 10; metalness: 0; roughness: 1">
+                <a-animation attribute ="scale" begin="screenUp" from = "9 0.2 0.3" to ="9 5 0.1" dur="500"></a-animation>
+                <a-animation attribute ="scale" begin="screenDown" from = "9 5 0.1" to ="9 0.2 0.3" dur="500"></a-animation>
+                <a-animation attribute ="position" begin="screenUp" from = "-63 9 9.1" to ="-63 6.7 9.1" dur="500"></a-animation>
+                <a-animation attribute ="position" begin="screenDown" from = "-63 6.7 9.1" to ="-63 9 9.1" dur="500"></a-animation>
+                </a-entity>
+                <!--South wall for professors room-->
+                <a-entity geometry="primitive: box; depth: 0.2; height:10; width: 30" position="-30 5 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
                 <a-entity geometry="primitive: box; depth: 0.2; height:4; width: 30" position="-30 8 0" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
                 <a-entity geometry="primitive: box; depth: 0.2; height:6; width: 10" position="-40 3 0" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
                 <a-entity geometry="primitive: box; depth: 0.2; height:6; width: 10" position="-25 3 0" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
@@ -108,15 +215,20 @@
             <!--floor-->
                 <a-entity geometry="primitive: box; depth: 20; height:0.1; width: 30" position="0 0 0" material="src: url(images/floor.png); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
                 <a-entity geometry="primitive: box; depth: 20; height:0.1; width: 30" position="-30 0 0" material="src: url(images/floor.png); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 20; height:0.1; width: 30" position="-60 0 0" material="src: url(images/floor.png); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
+
             <!--Ceiling-->
                 <a-entity geometry="primitive: box; depth: 20; height:0.1; width: 30" position="0 10 0" material="src: url(images/ceiling.jpg); shader: flat; side: double; opacity: 1; repeat: 10 15; metalness: 0; roughness: 1"></a-entity>
                 <a-entity geometry="primitive: box; depth: 20; height:0.1; width: 30" position="-30 10 0" material="src: url(images/ceiling.jpg); shader: flat; side: double; opacity: 1; repeat: 10 15; metalness: 0; roughness: 1"></a-entity>
+                <a-entity geometry="primitive: box; depth: 20; height:0.1; width: 30" position="-60 10 0" material="src: url(images/ceiling.jpg); shader: flat; side: double; opacity: 1; repeat: 10 15; metalness: 0; roughness: 1"></a-entity>
 
             <!--Grass outside-->
                 <a-entity geometry="primitive: box; depth: 500; height: 0.05; width: 500" position="0 0 0" material="src: url(images/grass.jpeg); repeat: 500 500; metalness: 0; roughness: 1"></a-entity>
-            <!-- RUG -->
-                <a-entity geometry="primitive: box; depth: 5; height: 0.2; width: 6" position="-1 0 0.35" rotation ="0 90 0" material="src: url(images/rug.jpeg); repeat: 5 6; roughness: 1; metalness: 0"></a-entity>
-
+            <!-- carpet -->
+                <a-entity position="-0.83 0.1 0.35">
+                <a-gltf-model src="#carpet" scale="0.11 0.1 0.13" rotation="0 90 0"></a-gltf-model>
+                </a-entity>
+               
             <!-- Baseboard and crowning on walls-->
                 <a-entity geometry="primitive: cylinder; radius: 0.05; height: 60" rotation="0 0 90" position="-15 0.05 -9.9" material="color: white"></a-entity>
                 <a-entity geometry="primitive: cylinder; radius: 0.05; height: 60" rotation="0 0 90" position="-15 9.9 -9.9" material="color: white"></a-entity>
@@ -139,74 +251,78 @@
 
             <!--Sky-->
             <a-sky src="#sky"></a-sky>
-            <a-entity position="0 0 0">
-                <a-camera universal-controls>
-                    <a-entity raycaster="far: 150; objects: .intersectable" cursor geometry="primitive: ring; radiusOuter: 0.015;
-                              radiusInner: 0.01; segmentsTheta: 32" material="color: #283644; shader: flat" position="0 0 -0.75"></a-entity>
-                </a-camera>
-            </a-entity>
-            <!-- Light Switch -->
-            <a-entity toggle-main-lights class="intersectable" position="-13.5, 1.5, 9.9">
-                <a-text value="Light switch" align="center" width="6" position="0 1 0" color="red" rotation="0 180 0"></a-text>
-                <a-entity geometry="primitive: box; depth: 0.1; height: 0.5; width: 0.25" material="color: lightgrey"></a-entity>
-                <a-entity id="Lever" geometry="primitive: box; depth: 0.3; height: 0.1; width: 0.1" material="color: white" rotation="45 0 0">
-                    <a-animation attribute="rotation" begin="lightOn" from="-45 0 0" to="45 0 0" dur="500"></a-animation>
-                    <a-animation attirbute="rotation" begin="lightOff" from="45 0 0" to="-45 0 0" dur="500"></a-animation>
-                </a-entity>
-            </a-entity>
             
-            <!--waiting_chairs
+            
+            
+            <!--waiting_chairs-->
                 <a-entity  position="1.5 0.1 0.75">
                 <a-gltf-model src="#chair" scale="0.003 0.003 0.003" rotation="0 270 0"></a-gltf-model>
                 </a-entity>
                 <a-entity  position="9.5 0.1 -6.75">
                 <a-gltf-model src="#chair" scale="0.003 0.003 0.003" rotation="0 0 0"></a-gltf-model>
                 </a-entity>
-            -->
-            <!--tv
+              
+                
+            <!--tv-->
                 <a-entity  position="-13.5 3.35 0.2">
                 <a-gltf-model src="#tv" scale="2 2 1.5" rotation="0 90 0"></a-gltf-model>
+                <a-entity tv-toggle class="intersectable" geometry="primitive: box; depth: 0.01; height: 2.2; width: 3.9" material="color: black" position="0.1 0 0" rotation="0 90 0"></a-entity>
                 </a-entity>
-            -->
-            <!--TV_stand
-                <a-entity  position="-13 0.1 2.5">
+               
+
+            
+            <!--TV_stand-->
+                <a-entity move-drone class="intersectable" position="-13 0.1 2.5" >
                 <a-gltf-model src="#tv_stand" scale="4 4 4" rotation="0 90 0"></a-gltf-model>
+                <a-animation attribute="position" begin="droneUp" from="-13 0.1 2.5" to="-13 6 2.5" dur="500"></a-animation>
+                <a-animation attribute="position" begin="droneDown" from="-13 6 2.5" to="-13 0.1 2.5" dur="500"></a-animation>
+                
                 </a-entity>
-            -->
+            
             <!--Table near chair-->
-            <!--self made model-
+            <!--self made model-->
                 <a-cylinder position = "0.5 0.1 2.5" radius="0.05" height="2.2"  src="images/wood.jpg"></a-cylinder>
                 <a-cylinder position = "-2 0.1 -2.0" radius="0.05" height="2.2" src="images/wood.jpg"></a-cylinder>
                 <a-cylinder position = "-2. 0.1 2.5" radius="0.05" height="2.2" src="images/wood.jpg"></a-cylinder>
                 <a-cylinder position = "0.5 0.1 -2.0" radius="0.05" height="2.2" src="images/wood.jpg"></a-cylinder>
                 <a-box position="-1 1.2 0.35" scale="3.4 0.1 5.7" src="images/wood.jpg"></a-box>
-            -->
-            <!--books-
+            
+            <!--books-->
                 <a-entity  position="-1.5 1.3 0.85">
                 <a-gltf-model src="#book" scale="0.2 0.2 0.2" rotation="0 0 0"></a-gltf-model>
                 </a-entity>
-            -->
-            <!--Book Shelf
-                <a-entity  position="-8.8 -0.1 -8.6">
-                <a-gltf-model src="#bookshelf" scale="1 1 1" rotation="0 0 360"></a-gltf-model>
-                </a-entity>
-            -->
-            <!-- Ceiling Lights
             
+            <!--Book table-->
+                <a-entity  position="-8.8 -0.1 -8">
+                <a-gltf-model src="#bookstable" scale="0.07 0.07 0.07" rotation="0 0 360"></a-gltf-model>
+                </a-entity>
+            
+        
+            <!-- Ceiling Lights
+                
             -->
                 <a-entity position="-5 3 0">
-                <a-entity class="MainLighting" light="type: point; intensity: 1; distance: 50" position="0 2 0"></a-entity>
                 <a-gltf-model src="#ceiling_light" scale="0.015 0.015 0.015"  position="2.5 5 -8.5"></a-gltf-model>
                 </a-entity>
 
                 <a-entity position="-5 3 0"> 
-                <a-entity class="MainLighting" light="type: point; intensity: 1; distance: 50" position="0 2 0"></a-entity>
                 <a-gltf-model src="#ceiling_light" scale="0.015 0.015 0.015" position="2.5 5 8.5"></a-gltf-model>
                 </a-entity>
+            <!--ceiling fan-->
+                <a-entity gltf-model ="#ceiling_fan" scale="0.25 0.25 0.25"  position="2.5 6 0" class="intersectable">
+                <a-animation attribute="rotation"
+                dur="1500"
+                from="0 0 0"
+                to="0 360 0"
+                repeat="indefinite"
+                easing="linear"></a-animation>
+                </a-entity>
+
             <!--security camera-->
                 <a-entity  position="-13 8.5 -8.75">
                 <a-gltf-model src="#security_camera" scale="0.1 0.1 0.1" rotation="0 0 0"></a-gltf-model>
                 </a-entity>
+            
             
             <!--office_desk-->
                 <a-entity  position="-37.5 0.1 6.3">
@@ -219,6 +335,9 @@
                 <a-entity  position="-21 0.1 -3.5">
                 <a-gltf-model src="#professors_desk" scale="3 3 3" rotation="0 270 0"></a-gltf-model>
                 </a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-32 7 0.2" scale="0.5 0.5 0.5" material="src:url(images/professors_wall.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-18.5 7 0.2" scale="0.5 0.5 0.5" material="src:url(images/professors_wall2.jpg)"></a-entity>
+            
             <!--professor_book_shelf-->
                 <a-entity  position="-32 2 -6.5">
                 <a-gltf-model src="#professor_book_shelf" scale="2.5 2 2" rotation="0 270 0"></a-gltf-model>
@@ -245,7 +364,125 @@
                 <a-cylinder position="-28.4 0.1 9.7" height="2.7" radius="0.05" src="images/wood.jpg"></a-cylinder>
                 <a-cylinder position="-30 0.1 9.7" height="2.7" radius="0.05" src="images/wood.jpg"></a-cylinder>
                 <a-cylinder position="-30 0.1 8.5" height="2.7" radius="0.05" src="images/wood.jpg"></a-cylinder>
-                
+            <!--Projector-->
+                <a-entity  position="-63 8.7 -9.5">
+                <a-gltf-model src="#projector" scale="0.03 0.03 0.03" rotation="0 0 0"></a-gltf-model>
+                </a-entity> 
+            <!--school_chair-->
+                <a-entity  position="-60 0.01 3.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>  
+                <a-entity  position="-68 0.01 3.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>  
+                <a-entity  position="-76 0.01 3.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>
+                <a-entity  position="-72 0.01 7.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>
+                <a-entity  position="-80 0.01 7.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>
+                <a-entity  position="-64 0.01 7.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>
+                <a-entity  position="-60 0.01 11.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>  
+                <a-entity  position="-68 0.01 11.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>  
+                <a-entity  position="-76 0.01 11.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>
+
+            <!--TTU buildings-->
+            <a-image position ="0 0 -35" rotation="0 0 0" scale="50 50 50" material="src:url(images/TTU_Campus1.jpg)"></a-image>
+            
+        </a-entity>
+        <a-entity id="Scene2" visible="false" >
+            
+            <a-box color="green" position="2 3 9.7" scale="0.25 0.2 0.02" onclick="setScene1()"></a-box>
+            <!--Social distance sign on chairs-->
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="4.4 2 -1" rotation="0 90 0" scale="0.15 0.15 0.15" material="src:url(images/social_distance.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="4.4 2 2.6" rotation="0 90 0" scale="0.15 0.15 0.15" material="src:url(images/social_distance.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="7.7 2 -9.6" scale="0.15 0.15 0.15" material="src:url(images/social_distance.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="11.3 2 -9.6" scale="0.15 0.15 0.15" material="src:url(images/social_distance.jpg)"></a-entity>
+            
+            <!--Mask required-->
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-36.9 4 0.2" scale="0.5 0.5 0.5" material="src:url(images/mask.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-22 4 0.2" scale="0.5 0.5 0.5" material="src:url(images/mask.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="5 5 9.8" scale="0.5 0.5 0.5" material="src:url(images/seating.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-6 5 9.8" scale="0.5 0.5 0.5" material="src:url(images/TTU_sign2.png)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-72 5 -9.8" scale="0.5 0.5 0.5" material="src:url(images/seating.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-74.8 5 4" rotation="0 90 0" scale="0.5 0.5 0.5" material="src:url(images/TTU_sign2.png)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-60 5 -9.8" scale="0.5 0.5 0.5" material="src:url(images/TTU_sign1.png)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-45.2 5 -4" rotation="0 90 0" scale="0.5 0.5 0.5" material="src:url(images/social_distance.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-45.2 5 4" rotation="0 90 0" scale="0.5 0.5 0.5" material="src:url(images/TTU_sign2.png)"></a-entity>
+            <!--Hand Sanitizer-->
+                <!--sanitizer_bottle-->
+                <a-entity  position="-2.2 1.28 1.8">
+                <a-gltf-model src="#sanitizer" scale="0.05 0.05 0.05" rotation="0 90 0"></a-gltf-model>
+                </a-entity>
+                <a-entity  position="-1 1.28 2.35">
+                <a-gltf-model src="#sanitizer" scale="0.05 0.05 0.05" rotation="0 90 0"></a-gltf-model>
+                </a-entity>
+                <a-entity  position="0.2 1.28 3">
+                <a-gltf-model src="#sanitizer" scale="0.05 0.05 0.05" rotation="0 90 0"></a-gltf-model>
+                </a-entity>
+        </a-entity>
+
+        <a-entity id="Scene3" visible="true">
+            <!--waiting chairs-->
+                <a-entity  position="5.5 0.1 6.75">
+                <a-gltf-model src="#chair" scale="0.003 0.003 0.003" rotation="0 180 0"></a-gltf-model>
+                </a-entity>
+            <!--school_chair-->
+                <a-entity  position="-64 0.01 3.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>  
+                <a-entity  position="-72 0.01 3.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>  
+                <a-entity  position="-80 0.01 3.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>
+                <a-entity  position="-60 0.01 7.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>
+                <a-entity  position="-68 0.01 7.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>
+                <a-entity  position="-76 0.01 7.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>
+                <a-entity  position="-64 0.01 11.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>  
+                <a-entity  position="-72 0.01 11.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>  
+                <a-entity  position="-80 0.01 11.5">
+                <a-gltf-model src="#school_chair" scale="0.3 0.3 0.3" rotation="0 270 0"></a-gltf-model>
+                </a-entity>
+
+        </a-entity>
+        <script type="text/javascript"> 
+            function setScene1() {
+              document.getElementById('Scene1').setAttribute('visible', 'true')
+              document.getElementById('Scene2').setAttribute('visible', 'false')
+              document.getElementById('Scene3').setAttribute('visible', 'true')
+            
+            }
+             function setScene2() {
+              document.getElementById('Scene1').setAttribute('visible', 'true')
+              document.getElementById('Scene2').setAttribute('visible', 'true')
+              document.getElementById('Scene3').setAttribute('visible', 'false')
+            }
+          
+             
+            </script> 
             
         </a-scene>   
 

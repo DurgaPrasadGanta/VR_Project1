@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>ECS - A-Frame School</title>
+    <meta name="description" content="ECS - A-Frame School">
+    <script src="aframe.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v1.14.0/dist/aframe-extras.min.js"></script>
+    <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+    <script src="https://unpkg.com/aframe-click-drag-component"></script>
+
+    <script>
+    
+      AFRAME.registerComponent("door-toggle", {
+                  init: function() {
+                      var open = false;
+                      var self = this.el;
+                      self.addEventListener("click", function(evt) {
+                          if (open) {
+                              open = false;
+                              self.emit("doorClosing");
+                          } else {
+                              open = true;
+                              self.emit("doorOpening");
+                          }
+                      })
+                  }
+              });
+          AFRAME.registerComponent("move-drone",{
+                      init: function(){
+                          var move=false;
+                          var self=this.el;
+                          self.addEventListener("click",function(evt){
+                              if (move){
+                                  move=false;
+                                  self.emit("droneDown");
+                              }else{
+                                  move=true;
+                                  self.emit("droneUp")
+                              }
+  
+                  })
+               }
+          }),
+              AFRAME.registerComponent("tv-toggle", {
+                  init: function() {
+                      var on = false;
+                      var self = this.el;
+                      self.addEventListener("click", function(evt) {
+                          var newMaterial;
+                          var newLighting;
+                          if (on) {
+                              newMaterial = {shader: "standard", color : "black"};
+                              on=false
+                          } else {
+                              newMaterial = {shader: "flat", src: "#video"};
+                              on=true
+                          }
+                          self.setAttribute("material", newMaterial, true);
+                          
+                          document.querySelector("#video").muted = !on;
+                      });
+                  }
+              });
+              AFRAME.registerComponent('audiohandler', {
+    init: function() {
+      let playing = false;
+      let audio = document.querySelector("#neigh");
+      this.el.addEventListener('click', () => {
+        if (!playing) {
+          audio.play();
+        } else {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+        playing = !playing;
+      });
+    }
+  })
+              
+      </script>
+ 
+  </head>
+  <body>
+  
+    <a-scene>
+      <a-assets>
+        <a-asset-item id="chair" src="Assets/waiting_chairs/scene.gltf"></a-asset-item>
+        <a-asset-item id="tv" src="Assets/Television/scene.gltf"></a-asset-item>
+        <a-asset-item id="tv_stand" src="Assets/TV_stand/TV stand.gltf"></a-asset-item>
+        <audio id="neigh" crossorigin="anonymous" src="images/monster_mash.mp3"></audio>
+      </a-assets>
+      <!--
+  <a-entity position="0 2.5 20">
+    <a-camera universal-controls>
+        <a-entity raycaster="far: 150; objects: .intersectable" cursor geometry="primitive: ring; radiusOuter: 0.015;
+                  radiusInner: 0.01; segmentsTheta: 32" cursor="click:true" material="color: #283644; shader: flat" position="0 0 -0.75"></a-entity>
+    </a-camera>
+</a-entity>
+
+    
+  -->
+  <a-entity camera position="2 1 10" universal-controls>
+    <a-entity cursor="click:true" 
+              position="0 0 -1"
+              geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+              material="color: black; shader: flat">
+     
+      
+    </a-entity>
+  </a-entity>
+
+      <a-entity id="Scene1" visible="true" >
+        <a-box color="red" position="0 0 0" onclick="setScene2()" > </a-box>
+        <a-box color="green" position="-3 0 0" audiohandler></a-box>
+        <a-entity  position="1.5 0.1 0.75">
+          <a-gltf-model src="#chair" scale="0.003 0.003 0.003" rotation="0 270 0"></a-gltf-model>
+          </a-entity>
+          <a-entity  position="9.5 0.1 -6.75">
+          <a-gltf-model src="#chair" scale="0.003 0.003 0.003" rotation="0 0 0"></a-gltf-model>
+          </a-entity>
+          <a-entity move-drone class="intersectable" position="-13 0.1 2.5" >
+            <a-gltf-model src="#tv_stand" scale="4 4 4" rotation="0 90 0"></a-gltf-model>
+            <a-animation attribute="position" begin="droneUp" from="-13 0.1 2.5" to="-13 6 2.5" dur="500"></a-animation>
+            <a-animation attribute="position" begin="droneDown" from="-13 6 2.5" to="-13 0.1 2.5" dur="500"></a-animation>
+          </a-entity>
+      </a-entity>
+       
+        
+      <a-entity id="Scene2" visible="false" >
+        <a-box color="blue" position="0 0 0"  > </a-box>
+        <a-box color="orange" position="-6 0 0" onclick="setScene1()"></a-box>
+        <a-entity  position="1.5 0.1 0.75">
+          <a-gltf-model src="#chair" scale="0.003 0.003 0.003" rotation="0 270 0"></a-gltf-model>
+          </a-entity>
+          <a-entity  position="9.5 0.1 -6.75">
+          <a-gltf-model src="#chair" scale="0.003 0.003 0.003" rotation="0 0 0"></a-gltf-model>
+          </a-entity>
+          <a-entity  position="-13.5 3.35 0.2">
+            <a-gltf-model src="#tv" scale="2 2 1.5" rotation="0 90 0"></a-gltf-model>
+            <a-entity tv-toggle class="intersectable" geometry="primitive: box; depth: 0.01; height: 2.2; width: 3.9" material="color: black" position="0.1 0 0" rotation="0 90 0"></a-entity>
+            </a-entity>
+      </a-entity>
+
+  </a-scene>
+  
+  <script type="text/javascript"> 
+    function setScene1() {
+      document.getElementById('Scene1').setAttribute('visible', 'true')
+      document.getElementById('Scene2').setAttribute('visible', 'false')
+    
+    }
+     function setScene2() {
+      document.getElementById('Scene1').setAttribute('visible', 'false')
+      document.getElementById('Scene2').setAttribute('visible', 'true')
+    }
+  
+     
+    </script> 
+  </body>
+</html>
