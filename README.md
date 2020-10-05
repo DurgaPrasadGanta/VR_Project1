@@ -29,5 +29,12 @@ This project application is written in html, A-Frame.js and javascript.
 
 ![6](https://user-images.githubusercontent.com/56169161/95033298-4dc26500-0683-11eb-8211-ca95b06773f5.JPG)
 
+## Sources
+Book Table: https://sketchfab.com/3d-models/books-table-f20f35fa87cf4c03b29bc4865897d4d5
 
+Chair : https://sketchfab.com/3d-models/malmo-chair-907ab4f0d08c404a944c6774f18f5b82
+
+Desk with chair : https://sketchfab.com/3d-models/school-desk-and-chair-004b95391e4e48a797ee8d0cf612b5cf
+
+Computer desk : https://sketchfab.com/3d-models/office-computer-9403093258264563a89d708b906f1b47
 
