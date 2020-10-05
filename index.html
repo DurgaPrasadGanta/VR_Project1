@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <script src="aframe.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="main.css">
+    
     <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v1.14.0/dist/aframe-extras.min.js"></script>
     <script src="https://rawgit.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
     <script src="https://unpkg.com/aframe-click-drag-component"></script>
 
-    <script src="main.js"></script>
+    
     <script>
     
     AFRAME.registerComponent("door-toggle", {
@@ -210,8 +210,9 @@
                 <a-entity geometry="primitive: box; depth: 0.2; height:6; width: 10" position="-40 3 0" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
                 <a-entity geometry="primitive: box; depth: 0.2; height:6; width: 10" position="-25 3 0" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
 
-            <!--Research Paper on wall-->
+            <!--Research Paper on wall
                 <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="0.5 6.2 -9.75" material="src:url(images/Paper.jpg)"></a-entity>
+            -->
             <!--floor-->
                 <a-entity geometry="primitive: box; depth: 20; height:0.1; width: 30" position="0 0 0" material="src: url(images/floor.png); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
                 <a-entity geometry="primitive: box; depth: 20; height:0.1; width: 30" position="-30 0 0" material="src: url(images/floor.png); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
@@ -405,10 +406,10 @@
             
             <a-box color="green" position="2 3 9.7" scale="0.25 0.2 0.02" onclick="setScene1()"></a-box>
             <!--Social distance sign on chairs-->
-                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="4.4 2 -1" rotation="0 90 0" scale="0.15 0.15 0.15" material="src:url(images/social_distance.jpg)"></a-entity>
-                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="4.4 2 2.6" rotation="0 90 0" scale="0.15 0.15 0.15" material="src:url(images/social_distance.jpg)"></a-entity>
-                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="7.7 2 -9.6" scale="0.15 0.15 0.15" material="src:url(images/social_distance.jpg)"></a-entity>
-                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="11.3 2 -9.6" scale="0.15 0.15 0.15" material="src:url(images/social_distance.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="4.4 2 -1" rotation="0 90 0" scale="0.15 0.15 0.15" material="src:url(images/cross.png)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="4.4 2 2.6" rotation="0 90 0" scale="0.15 0.15 0.15" material="src:url(images/cross.png)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="7.7 2 -9.6" scale="0.15 0.15 0.15" material="src:url(images/cross.png)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="11.3 2 -9.6" scale="0.15 0.15 0.15" material="src:url(images/cross.png)"></a-entity>
             
             <!--Mask required-->
                 <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-36.9 4 0.2" scale="0.5 0.5 0.5" material="src:url(images/mask.jpg)"></a-entity>
