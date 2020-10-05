@@ -108,6 +108,8 @@
             </a-entity>
           </a-entity>
         <a-entity id="Scene1" visible="true" >
+            
+            <a-text value="Click red for covid mode and green for non covid mode" align="center" width="6" position="1 3.5 9.5" rotation="0 180 0" color="red"></a-text>
             <a-box color="green" position="2 3 9.7" scale="0.25 0.2 0.02" onclick="setScene1()"></a-box>
             <a-box color="red" position="0 3 9.7" scale="0.25 0.2 0.02" onclick="setScene2()"></a-box>
             <!-- Door -->
@@ -140,7 +142,9 @@
             <!--TTU Logo-->
                 <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="0.2 7.5 10.2" scale="1 1 1" material="src:url(images/TTU.jpg)"></a-entity>
                 <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-30.2 7.5 10.2" scale="1 1 1" material="src:url(images/TTU_CS.jpg)"></a-entity>
-                
+                <a-text value="Click on door to open/close " align="center" position="-16 6.3 10.2" width="6" color="red"></a-text>
+                <a-text value="Click on door to open/close " align="center" position="-46 6.3 10.2" width="6" color="red"></a-text>
+
                 
             <!--East wall-->
                 <a-entity geometry="primitive: box; depth: 20; height: 10; width: 0.2" position="-45 5 0" material="src: url(images/wall.jpg); repeat: 17.5 1.25; metalness: 0; roughness: 1"></a-entity>
@@ -199,11 +203,14 @@
                 <a-cylinder color="blue" height="0.8" radius="0.05" position="-64.5 1.6 9.7" rotation="0 0 90" ></a-cylinder>
                 <a-cylinder color="green" height="0.8" radius="0.05" position="-61.5 1.6 9.7" rotation="0 0 90" ></a-cylinder>
                 <a-entity move-projector class="intersectable" geometry="primitive: box" scale="9 0.2 0.3" position="-63 9 9.1" material="src: url(images/board.jpg); repeat: 30 10; metalness: 0; roughness: 1">
+                 
+
                 <a-animation attribute ="scale" begin="screenUp" from = "9 0.2 0.3" to ="9 5 0.1" dur="500"></a-animation>
                 <a-animation attribute ="scale" begin="screenDown" from = "9 5 0.1" to ="9 0.2 0.3" dur="500"></a-animation>
                 <a-animation attribute ="position" begin="screenUp" from = "-63 9 9.1" to ="-63 6.7 9.1" dur="500"></a-animation>
                 <a-animation attribute ="position" begin="screenDown" from = "-63 6.7 9.1" to ="-63 9 9.1" dur="500"></a-animation>
                 </a-entity>
+                <a-text value="Click to operate projestor screen " align="center" position="-63 8 9" rotation="0 180 0" width="6" color="red"></a-text>
                 <!--South wall for professors room-->
                 <a-entity geometry="primitive: box; depth: 0.2; height:10; width: 30" position="-30 5 -10" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
                 <a-entity geometry="primitive: box; depth: 0.2; height:4; width: 30" position="-30 8 0" material="src: url(images/wall.jpg); shader: flat; side: double; opacity: 1; repeat: 30 10; metalness: 0; roughness: 1"></a-entity>
@@ -269,7 +276,8 @@
                 <a-gltf-model src="#tv" scale="2 2 1.5" rotation="0 90 0"></a-gltf-model>
                 <a-entity tv-toggle class="intersectable" geometry="primitive: box; depth: 0.01; height: 2.2; width: 3.9" material="color: black" position="0.1 0 0" rotation="0 90 0"></a-entity>
                 </a-entity>
-               
+                <a-text value="Click on tv to turn it on/off" align="center" width="6" position="-14.86 5.5 0.2" rotation="0 90 0" color="red"></a-text>
+
 
             
             <!--TV_stand-->
@@ -418,10 +426,10 @@
                 <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-22 4 0.2" scale="0.5 0.5 0.5" material="src:url(images/mask.jpg)"></a-entity>
                 <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="5 5 9.8" scale="0.5 0.5 0.5" material="src:url(images/TTU_sign1.png)"></a-entity>
                 <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-6 5 9.8" scale="0.5 0.5 0.5" material="src:url(images/TTU_sign2.png)"></a-entity>
-                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-72 5 -9.8" scale="0.5 0.5 0.5" material="src:url(images/seating.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-72 5 -9.8" scale="0.5 0.5 0.5" material="src:url(images/mask.jpg)"></a-entity>
                 <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-74.8 5 4" rotation="0 90 0" scale="0.5 0.5 0.5" material="src:url(images/TTU_sign2.png)"></a-entity>
                 <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-60 5 -9.8" scale="0.5 0.5 0.5" material="src:url(images/TTU_sign1.png)"></a-entity>
-                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-45.2 5 -4" rotation="0 90 0" scale="0.5 0.5 0.5" material="src:url(images/social_distance.jpg)"></a-entity>
+                <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-45.2 5 -4" rotation="0 90 0" scale="0.5 0.5 0.5" material="src:url(images/mask.jpg)"></a-entity>
                 <a-entity geometry='primitive: box; depth:0.01; height: 4; width: 7' position ="-45.2 5 4" rotation="0 90 0" scale="0.5 0.5 0.5" material="src:url(images/TTU_sign2.png)"></a-entity>
             <!--Hand Sanitizer-->
                 <!--sanitizer_bottle-->
