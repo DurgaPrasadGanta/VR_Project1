@@ -25,4 +25,9 @@ This project application is written in html, A-Frame.js and javascript.
 ## After Covid
 ![2](https://user-images.githubusercontent.com/56169161/95032759-57e36400-0681-11eb-8731-8f9e4ea4300a.JPG)
 
+![3](https://user-images.githubusercontent.com/56169161/95033297-4dc26500-0683-11eb-9210-f3a5dc053e22.JPG)
+
+![6](https://user-images.githubusercontent.com/56169161/95033298-4dc26500-0683-11eb-8211-ca95b06773f5.JPG)
+
+
 
