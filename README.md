@@ -56,3 +56,4 @@ Security Camera : https://sketchfab.com/3d-models/security-camera-7da2489681d749
 
 Desk 2 : https://sketchfab.com/3d-models/office-107e9faf01024a0eb2aa5993d3df0c57
 
+TV Stand: https://poly.google.com/view/cdaYXv8Rngf
