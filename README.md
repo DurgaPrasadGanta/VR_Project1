@@ -38,3 +38,21 @@ Desk with chair : https://sketchfab.com/3d-models/school-desk-and-chair-004b9539
 
 Computer desk : https://sketchfab.com/3d-models/office-computer-9403093258264563a89d708b906f1b47
 
+Books : https://sketchfab.com/3d-models/books-c2a399966ab942558fc21dc76bf30190
+
+Ceiling Lamp : https://sketchfab.com/3d-models/ceiling-lamp-version-01-c65fca4ac8d74c94a95c19226cb6bf78
+
+Fan : https://sketchfab.com/3d-models/conion-ceiling-fan-105b2927193149ceb7dec74908264fee
+
+Book shelf :https://sketchfab.com/3d-models/bookshelf-b8f46cf7daca419a87ac8d131bad056f
+
+Sanitizer : https://sketchfab.com/3d-models/sanitizer-bottle-ec67d7141333464ca1061320452f06a2
+
+Flat Screen : https://sketchfab.com/3d-models/2018-flat-screen-tv-d885976821324ceb8fa4f1fa569b0295
+
+Projector : https://sketchfab.com/3d-models/projector-b002e5f720074145a522099542c02f1b
+
+Security Camera : https://sketchfab.com/3d-models/security-camera-7da2489681d749fda57ffdf1db9f0419
+
+Desk 2 : https://sketchfab.com/3d-models/office-107e9faf01024a0eb2aa5993d3df0c57
+
